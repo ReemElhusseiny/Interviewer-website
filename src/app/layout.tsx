@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import "@stream-io/video-react-sdk/dist/css/styles.css";
 import "./globals.css";
 
+import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "../components/Providers/ThemeProvider";
+import ConvexClerkProvider from "../components/Providers/ConvexClerkProvider";
+import Navbar from "@/components/Navbar";
+import AuthGate from "../components/AuthGate";
+
+// Load local fonts
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -20,16 +29,31 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <html lang="en" suppressHydrationWarning>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ConvexClerkProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {/* <AuthGate> */}
+              <div className="min-h-screen">
+                <Navbar />
+                {/* className="px-4 sm:px-6 lg:px-8" */}
+                <main >{children}</main>
+              </div>
+            {/* </AuthGate> */}
+          </ThemeProvider>
+    </ConvexClerkProvider>
+
+          <Toaster />
+        </body>
+      </html>
   );
 }
