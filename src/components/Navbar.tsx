@@ -9,7 +9,7 @@ import DasboardBtn from "./DashboardBtn";
 function Navbar() {
   return (
     // means border bottom: 1px
-    <nav className="border-b bg-[var(--background-navbar)]">
+    <nav className="border-b bg-white dark:bg-[#000]/30 shadow-sm">
       <div className="flex h-16 items-center px-4 container mx-auto">
 
         {/* LEFT SIDE -LOGO */}

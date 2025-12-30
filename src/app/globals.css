@@ -9,13 +9,19 @@
 }
 
 
-
+/* #eeedff */
 @layer base {
   :root {
     --background-main: linear-gradient(to bottom, #eeedff 0%, #fff 100%);
-    --background-card: #e6f0f9;
-    --background-navbar: #ffff;
-    --background-card-secondary: #fff;
+    /* --background-main: linear-gradient(to bottom, #f0e1ff  0%, #fff 100%); */
+    --background-secondary: #e6f0f9;
+    --background-Thirdly: #ffff;
+    --background-fourth: #ffff;
+    --background-color-primary: #48a6e6;
+     --background-color-card:  #48a6e6;
+     --background-color-btn:  #48a6e6;
+    /* --background-color-primary: linear-gradient(to bottom right, #6366F1, #7C3AED); */
+    /* --background-card-secondary: #fff; */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -41,15 +47,21 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --background-seconary: #f7f7f9 ;
 
   }
 
   .dark {
-    --background-main: linear-gradient(to bottom, rgb(44, 42, 42) 0%, #000 100%);
-    --background-card: #2b26267e;
-    --background-card-secondary: #2b26267e;
-    --background-navbar: #000;
+    --background-main: linear-gradient(to bottom, #192231 0%, #111827 100%);
+    /* --background-main: linear-gradient(to bottom, rgb(44, 42, 42) 0%, #000 100%); */
+    --background-secondary: #2b26267e;
+     --background-Thirdly: #191f2c7a;
+    --background-color-card:  #48a7e671;
+    --background-color-card2: rgba(31, 27, 46, 0.562);
+    --background-fourth: #374d7c6c;
+    --background-color-primary:  #48a6e6;
+    --background-color-primary2: rgba(72, 167, 230, 0.438)6;
+    --background-color-btn:  #111827;
+    /* --background-navbar: #000; */
     --background: 20 14.3% 4.1%;
     --foreground: 0 0% 95%;
     --card: 24 9.8% 10%;
@@ -74,7 +86,6 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --background-seconary: #2b26267e ;
   }
 }
 
@@ -83,21 +94,28 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    /* @apply bg-background text-foreground; */
+    background-image: var(--background-main);
     padding: '0px';
     margin: '0px';
-    height: 100vh; 
-    background-image: var(--background-main);
+    min-height: 100%;
+    /* height: 100vh;  */
 }
 }
 @layer utilities {
   /* ✅ الفئة المخصصة الجديدة لفرض استخدام background-image */
   .bg-theme {
-    background-image: var(--background-main);
+    background-color: var(--background-color-primary);
   }
-  .clip-polygon-triangle {
-  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 100%);
-}
+  .bg-theme2 {
+    background: #d41f83;
+  }
+  .text-theme {
+      background: var(--background-color-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  }
   /* .bg-card {
      background-image: var(--background-card);
   } */

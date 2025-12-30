@@ -26,6 +26,8 @@ import { Loader2Icon, XIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { TIME_SLOTS } from "@/constants";
 import MeetingCard from "../../../components/MeetingCard";
+import { motion } from "framer-motion";
+import {Calendar as CalenderIcon} from "lucide-react";
 
 function InterviewScheduleUI() {
   const client = useStreamVideoClient();
@@ -38,6 +40,7 @@ function InterviewScheduleUI() {
   const createInterview = useMutation(api.interviews.createInterview);
 
   const candidates = users?.filter((u) => u.role === "candidate");
+  console.log("candidates", candidates);
   const interviewers = users?.filter((u) => u.role === "interviewer");
 
   const [formData, setFormData] = useState({
@@ -137,7 +140,7 @@ function InterviewScheduleUI() {
       <div className="flex items-center justify-between">
         {/* HEADER INFO */}
         <div>
-          <h1 className="text-3xl font-bold text-[#4f46e5]">Interviews</h1>
+          <h1 className="text-3xl font-bold">Interviews</h1>
           <p className="text-muted-foreground mt-1">Schedule and manage interviews</p>
         </div>
         {/* DIALOG */}
@@ -295,13 +298,42 @@ function InterviewScheduleUI() {
       ) : interviews.length > 0 ? (
         <div className="spacey-4">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {interviews.map((interview) => (
+            {interviews.map((interview) => {
+              console.log("interview")
+              return(
               <MeetingCard key={interview._id} interview={interview} />
-            ))}
+              )
+})}
           </div>
         </div>
       ) : (
-        <div className="text-center py-12 text-muted-foreground">No interviews scheduled</div>
+        <div className="flex flex-col items-center justify-center h-[60vh] text-center">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="relative mb-8"
+            >
+              <div className="absolute inset-0 bg-indigo-500/20 dark:bg-indigo-500/10 blur-3xl rounded-full" />
+              <div className="relative w-32 h-32 bg-white/50 dark:bg-gray-800/50 backdrop-blur-xl border border-white/20 dark:border-gray-700 rounded-full flex items-center justify-center shadow-2xl">
+                <CalenderIcon size={48} className="text-gray-400 dark:text-gray-500" />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                No schedules available
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-8 text-lg">
+                It looks like you haven't scheduled any interviews yet. Schedule your meeting to stay organized.
+              </p>
+
+            </motion.div>
+          </div>
       )}
     </div>
     </div>

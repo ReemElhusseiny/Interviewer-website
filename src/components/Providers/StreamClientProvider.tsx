@@ -82,7 +82,7 @@ const StreamVideoProvider = ({ children }: { children: ReactNode }) => {
   }, [user, isLoaded]);
   // --- LOADING / RENDER GUARD ---
   if (!isLoaded) {
-    return <p>Loading user data...</p>;
+    return <LoaderUI />;
   }
   
   // If user is NOT signed in AND we are on a protected route, we let the useEffect
@@ -102,7 +102,7 @@ const StreamVideoProvider = ({ children }: { children: ReactNode }) => {
 
   
   // --- RENDER STREAM PROVIDER ---
-  if (!streamVideoClient) return <p>Loading Stream...</p>;
+  if (!streamVideoClient) return <LoaderUI />;
   
   return <StreamVideo client={streamVideoClient}>{children}</StreamVideo>;
 };

@@ -10,7 +10,7 @@ function SchedulePage() {
 
   const { isInterviewer, isLoading } = useUserRole();
 
-  if (isLoading) return <p>Loading....</p>;
+  if (isLoading) return <LoaderUI />;
   if (!isInterviewer) return router.push("/");
 
   return <div className="h-full w-full"> <InterviewScheduleUI /> </div>;

@@ -1,3 +1,4 @@
+import {useState} from "react";
 import useMeetingActions from "../components/hooks/useMeetingActions.ts";
 import { Doc } from "../../convex/_generated/dataModel";
 import { getMeetingStatus } from "@/lib/utils";
@@ -24,11 +25,12 @@ type Interview = Doc<"interviews">;
 
 function MeetingCard({ interview }: { interview: Interview }) {
   const { joinMeeting } = useMeetingActions();
-
+  const [isHovered, setIsHovered] = useState(false);
   // const status = getMeetingStatus(interview);
-  const formattedDateTime = format(new Date(interview.startTime), "h:mm a");
+  const formattedDateTime = format(new Date(interview.startTime), "d MMM h:mm a");
   const formattedDateMonth = format(new Date(interview.startTime), "MMM");
   const formattedDateDay = format(new Date(interview.startTime), "d");
+  const formattedDayName = format(new Date(interview.startTime), "EEE");
 const getStatusConfig = (status: InterviewStatus) => {
     switch (status) {
       case 'live':
@@ -71,21 +73,19 @@ const getStatusConfig = (status: InterviewStatus) => {
       className="group relative flex bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
     >
       {/* Left Stub (Date) */}
-      <div className={`w-24 flex flex-col items-center justify-center p-4 ${config.bg} text-white relative`}>
+      {/* <div className={`w-24 flex flex-col items-center justify-center p-4 ${config.bg} text-white relative`}>
         <span className="text-xs font-bold opacity-80 uppercase tracking-wider mb-1">{formattedDateMonth}</span>
         <span className="text-2xl font-black">{formattedDateDay}</span>
         
-        {/* Perforated Line Effect */}
-        {/* translate-x-1/2 z-10 */}
         <div className="absolute right-0 top-0 bottom-0 w-[4px] flex flex-col justify-between">
           {[...Array(12)].map((_, i) => (
             <div key={i} className="w-2 h-2 rounded-full bg-gray-50 dark:bg-gray-900 mb-1" />
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Right Content */}
-      <div className="flex-1 p-5 pl-8 flex flex-col justify-between">
+      {/* <div className="flex-1 p-5 pl-8 flex flex-col justify-between">
         <div>
           <div className="flex justify-between items-start mb-2">
             <div className={`text-[10px] font-black tracking-widest uppercase ${config.text} border border-current px-2 py-0.5 rounded`}>
@@ -94,7 +94,6 @@ const getStatusConfig = (status: InterviewStatus) => {
             <div className="flex items-center text-gray-400 text-xs font-mono">
               <Clock size={12} className="mr-1" />
               {formattedDateTime}
-              {/* {interview.time} */}
             </div>
           </div>
           
@@ -107,11 +106,11 @@ const getStatusConfig = (status: InterviewStatus) => {
         </div>
 
         <div className="mt-4 flex items-center justify-end border-t border-dashed border-gray-200 dark:border-gray-700 pt-3">
-          {/* <div className="flex -space-x-2">
+          <div className="flex -space-x-2">
             {[1, 2].map((i) => (
               <div key={i} className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 border-2 border-white dark:border-gray-800" />
             ))}
-          </div> */}
+          </div>
    
            <div className="flex justify-end">
     <div className={`cursor-pointer flex items-center gap-1 text-xs ${config.text} border-b-2 border-transparent ${config.hoverBorder}`}>
@@ -119,11 +118,113 @@ const getStatusConfig = (status: InterviewStatus) => {
       <MoveRight className="w-3 h-3" />
     </div>
   </div>
-          {/* <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300">
-            {status === 'live' ? <Video size={18} /> : <MoreHorizontal size={18} />}
-          </button> */}
+
         </div>
+      </div> */}
+      {/* <div className='h-[500px] border-2 border-gray-200 dark:border-gray-700 rounded-2xl p-4 w-full'>
+         <Badge
+           className={ `
+            absolute right-5 
+            ${
+    status === "live"
+      ? "bg-[#fedbdb] text-[#b91f5c]"
+      : status === "upcoming"
+      ? "bg-[#dbeafe] text-[#429ef1]"
+      : "bg-[#dedfe4c5] text-[#515661]"}`
+  }
+>
+  {status === "live" ? (
+    <>
+      <CirclePlay className="inline w-4 h-4 mr-1" />
+      Live Now
+    </>
+  ) : status === "upcoming" ? (
+    <>
+      <CalendarIcon className="inline w-4 h-4 mr-1" />
+      Upcoming
+    </>
+  ) : (
+    <>
+      <CircleCheckBig className="inline w-4 h-4 mr-1" />
+      Completed
+    </>
+  )}
+</Badge>
+<div className="mt-[50px] flex items-center gap-3">
+  <p className="text-[#757e9c] text-2xl font-semibold mt-2">{formattedDayName}</p>
+  <p className="text-[#48a6e6] text-4xl font-bold">{formattedDateDay}</p>
+</div>
+
+        </div> */}
+          <Card
+      className={`w-full bg-[var(--background-Thirdly)] group cursor-pointer overflow-hidden hover:shadow-lg transition-shadow duration-300 hover:bg-[#f5effe] dark:hover:bg-transparent`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Category Badge and Important Indicator */}
+      <div className="absolute top-3 right-3 z-10 flex gap-2">
+             <Badge
+           className={ `
+            gap-1 
+            ${
+    status === "live"
+      ? "bg-[#fedbdb] text-[#b91f5c]"
+      : status === "upcoming"
+      ? "bg-[#dbeafe] text-[#429ef1]"
+      : "bg-[#dedfe4c5] text-[#515661]"} `
+  }
+>
+  {status === "live" ? (
+    <>
+      <CirclePlay className="inline w-4 h-4 mr-1" />
+      Live Now
+    </>
+  ) : status === "upcoming" ? (
+    <>
+      <CalendarIcon className="inline w-4 h-4 mr-1" />
+      Upcoming
+    </>
+  ) : (
+    <>
+      <CircleCheckBig className="inline w-4 h-4 mr-1" />
+      Completed
+    </>
+  )}
+</Badge>
       </div>
+
+      {/* Header with Date */}
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-4 mb-2">
+          <div className="flex-1">
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className="text-2xs font-semibold text-muted-foreground uppercase tracking-wider">
+                {formattedDayName}
+              </span>
+              <span className="text-theme text-3xl font-bold text-primary">
+                {formattedDateDay}
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {formattedDateTime}
+
+              </p>
+          </div>
+        </div>
+
+        <CardTitle className="text-xl hover:text-theme">
+          {interview.title}
+        </CardTitle>
+      </CardHeader>
+
+      {/* Content */}
+      <CardContent className="pb-4">
+        <CardDescription className="text-lg leading-relaxed">
+        {interview.description}
+        </CardDescription>
+<div className="w-full border-b-2 border-dashed border-gray-200 dark:border-gray-700 mt-4 mb-4"></div>
+      </CardContent>
+    </Card>
     </motion.div>
 //     <Card className={`border-l-4 ${
 //   status === 'live'

@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 type User = Doc<"users">;
 
 function UserInfo({ user }: { user: User }) {
+  console.log("user", user);
   return (
     <div className="flex items-center gap-2">
       <Avatar className="h-6 w-6">
@@ -13,7 +14,7 @@ function UserInfo({ user }: { user: User }) {
           <UserCircleIcon className="h-4 w-4" />
         </AvatarFallback>
       </Avatar>
-      <span>{user.name}</span>
+      <span>{user.email}</span>
     </div>
   );
 }

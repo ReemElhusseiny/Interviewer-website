@@ -114,14 +114,29 @@ export default function Home() {
   //     </div>
   //   );
   // };
-   if (isLoading) return <p>Loading....</p>;
+  
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+   if (isLoading) return <LoaderUI />;
   //  bg-gradient-to-b from-[#eeedff] to-white
   return (
-    <div className="w-full overflow-hidden bg-theme">
+    <div className="w-full">
+      {/* text-[#4f46e5] */}
     <div className="p-20 w-full flex flex-col lg:flex-row justify-center items-center gap-[15px] lg:gap-[50px]">
 <div className="flex flex-col justify-center"><p className="pb-1 text-6xl font-extrabold">The Future of</p>
-<p className="pb-3 text-6xl font-extrabold text-[#4f46e5]">Remote Interviews</p>
-<p className="pb-3 text-[#999fa9] max-w-[500px]">Connect, collaborate, and hire the best talent with our seamless video interviewing platform. Crystal clear audio, HD video, and integrated tools.</p>
+<p className="pb-3 text-6xl font-extrabold text-theme">Remote Interviews</p>
+<p className="pb-3 text-[#999fa9] max-w-[500px]">{isInterviewer ? "Connect, collaborate, and hire the best talent with our seamless video interviewing platform. Crystal clear audio, HD video, and integrated tools." : "Join interviews from anywhere with confidence. Enjoy crystal-clear audio, HD video, and easy-to-use tools designed to help you perform your best."}</p>
 </div>
 <Image
   src="/logoBg.png"
@@ -132,20 +147,35 @@ export default function Home() {
 />
     </div>
     <div className="mt-20 flex flex-col justify-center items-center">
-      <p className="text-3xl font-bold">Our Services</p>
-      <p className="p-3 text-[#999fa9] text-center">Everything you need for seamless remote interviews and collaboration.</p>
     </div>
+    {/* <ServicesGrid /> */}
+      <section className="py-24 px-4 max-w-7xl mx-auto">
      {isInterviewer ? (
-        <div className="w-full flex justify-center">
-          <div className="mt-10 pb-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-20">
-            {QUICK_ACTIONS.map((action) => (
-              <ActionCard
-                key={action.title}
+      <>
+       <div className="mb-16 text-center">
+             <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">Our Services</h2>
+             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+               Everything you need for seamless remote interviews and collaboration.
+             </p>
+           </div>
+        <motion.div 
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 h-[400px]" // Fixed height for 3D effect space
+          >
+            {QUICK_ACTIONS.map((action, index) => (
+              <motion.div key={index} variants={item} className="h-full">
+                <ActionCard
+                // key={action.title}
                 action={action}
                 onClick={() => handleQuickAction(action.title)}
               />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
+    
 
           <MeetingModal
             isOpen={showModal}
@@ -153,13 +183,19 @@ export default function Home() {
             title={modalType === "join" ? "Join Meeting" : "Start Meeting"}
             isJoinMeeting={modalType === "join"}
           />
-        </div>
+        </>
       ) : (
         <>
-          <div>
+          {/* <div>
             <h1 className="text-3xl font-bold">Your Interviews</h1>
             <p className="text-muted-foreground mt-1">View and join your scheduled interviews</p>
-          </div>
+          </div> */}
+             <div className="mb-16 text-center">
+             <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">Your Interviews</h2>
+             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+               View and join your scheduled interviews.
+             </p>
+           </div>
 
           <div className="mt-8">
             {interviews === undefined ? (
@@ -180,6 +216,7 @@ export default function Home() {
           </div>
         </>
       )}
+      </section>
     </div>
   )
   ;

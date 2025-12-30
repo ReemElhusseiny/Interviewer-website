@@ -67,7 +67,7 @@ function CommentDialog({ interviewId }: { interviewId: Id<"interviews"> }) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {/* TRIGGER BUTTON */}
       <DialogTrigger asChild>
-        <Button variant="secondary" className="w-full">
+        <Button  variant="secondary" className="w-full">
           <MessageSquareIcon className="h-4 w-4 mr-2" />
           Add Comment
         </Button>

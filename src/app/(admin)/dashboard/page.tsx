@@ -37,13 +37,12 @@ function DashboardPage() {
   const groupedInterviews = groupInterviews(interviews);
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 max-w-8xl">
       <div className="flex items-center mb-8">
         <Link href="/schedule">
           <Button>Schedule New Interview</Button>
         </Link>
       </div>
-
       <div className="space-y-8">
         {INTERVIEW_CATEGORY.map(
           (category) =>
@@ -61,7 +60,7 @@ function DashboardPage() {
                     const startTime = new Date(interview.startTime);
 
                     return (
-                      <Card className="hover:shadow-md transition-all">
+                      <Card  className={`w-full dark:bg-[#1f2937] group cursor-pointer overflow-hidden hover:shadow-lg transition-shadow duration-300 hover:bg-[#f5effe] dark:hover:bg-transparent`}>
                         {/* CANDIDATE INFO */}
                         <CardHeader className="p-4">
                           <div className="flex items-center gap-3">
