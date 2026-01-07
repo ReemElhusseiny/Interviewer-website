@@ -5,7 +5,7 @@ import { StreamClient } from "@stream-io/node-sdk";
 
 export const streamTokenProvider = async () => {
   const user = await currentUser();
-  console.log("##UserServer", user)
+  // console.log("##UserServer", user)
 
   if (!user) throw new Error("User not authenticated");
 

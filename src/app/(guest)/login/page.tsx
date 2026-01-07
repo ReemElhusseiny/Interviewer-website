@@ -178,7 +178,7 @@ const signInWith = (strategy: OAuthStrategy) => {
                     <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
                   </div>
        ): (
-     <button onClick={handleSubmitLogin} className="mt-10 bg-theme flex justify-center items-center w-[50px] h-[50px] rounded-xl hover:bg-[#ff6973]">
+     <button onClick={handleSubmitLogin} className="mt-10 bg-theme flex justify-center items-center w-[50px] h-[50px] rounded-xl hover:shadow-[0_0_20px_#48a6e6]">
            <ArrowRight style={{ fontSize: '30px'}} className="text-white" />
          </button>
        )}
