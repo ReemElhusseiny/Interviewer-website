@@ -1,0 +1,157 @@
+"use client"
+
+import React, {useState, useEffect, useRef} from 'react'
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Video, ArrowRight, Github } from "lucide-react";
+import { Badge } from "../../../components/ui/badge";
+import { Button } from "../../../components/ui/button";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { useSignUp } from '@clerk/nextjs';
+// import { SignUpButton, useClerk, UserButton, useSignIn, useSignUp, useUser } from '@clerk/nextjs';
+import { set } from 'date-fns';
+import { useRouter } from 'next/navigation';
+import { OAuthStrategy } from '@clerk/types'
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Sparkles, UserRound, Mail, LockKeyhole  } from 'lucide-react';
+import toast from "react-hot-toast";
+import { Switch } from '@/components/ui/switch';
+
+const MotionCard = motion(Card);
+
+export default function Register() {
+  const { isLoaded, signUp, setActive: setActiveSignUp  } = useSignUp()
+  const router = useRouter();
+  const [signUpData, setSignUpData] = React.useState({
+    username: '',
+    emailAddress: '',
+    password: '',
+  });
+  const [errorsData, setErrorsData] = React.useState({
+    username: '',
+    emailAddress: '',
+    password: '',
+  });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isInterviewer, setIsInterviewer] = useState(false);
+
+ 
+  const handleSignUpFields = (e: React.ChangeEvent<HTMLInputElement>) => {
+   setSignUpData({
+      ...signUpData, [e.target.name]: e.target.value
+    })
+  }
+  const handleSubmitSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try{
+      if (!signUp) return;
+      setIsSubmitting(true);
+    await signUp.create({
+      username: signUpData.username,
+      emailAddress: signUpData.emailAddress,
+      password: signUpData.password,
+      unsafeMetadata: {
+       role: isInterviewer ? "interviewer" : "candidate",
+      },
+    });
+    await signUp.prepareEmailAddressVerification({
+      strategy: 'email_code'
+    })
+       toast.success("Registration Successful! Please verify your email.");
+       router.push("/verify")
+      //  setVerify(true)
+    }
+   catch (err: any) {
+  const newErrors = { identifier: '', password: '' };
+  const clerkErrors = err?.errors ?? [];
+
+  clerkErrors.forEach((error: any) => {
+    const msg = error.longMessage ?? error.message;
+    if (error.meta?.paramName === "identifier") newErrors.identifier = msg;
+    if (error.meta?.paramName === "password") newErrors.password = msg;
+  });
+
+  if (!clerkErrors.some((e: any) => e.meta?.paramName)) {
+    toast.error(clerkErrors[0]?.longMessage ?? err.message ?? "Something went wrong. Please try again.");
+  }
+  setErrorsData(newErrors);
+} finally {
+      setIsSubmitting(false);
+    }
+  }
+  if(!isLoaded) return;
+  return (
+      <div className="h-[calc(100vh-4.2rem)] transition-colors duration-300 flex flex-col relative overflow-hidden">
+      
+      <div className="flex-1 flex flex-col items-center justify-center px-4 relative z-10 pb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-theme text-white shadow-lg shadow-indigo-500/30 mb-6">
+              <Sparkles size={32} />
+            </div>
+            <h1 className="text-4xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
+              Interviewer Platform
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">
+              Secure access to your meetings and recordings
+            </p>
+          </div>
+
+          {/* Glass Card Container for Auth UI */}
+          <MotionCard className="bg-[var(--background-Thirdly)] backdrop-blur-xl border border-white/20 dark:border-gray-700/50 rounded-3xl shadow-2xl p-2 md:p-6 overflow-hidden relative">
+            <div className="flex items-center flex-col gap-4">
+             <h1 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
+              Register Form
+            </h1>
+            <div className="w-[100%]">
+         <Label htmlFor="username" className="flex gap-2 items-center mb-1 text-[14px]"><UserRound size={18} /> Username</Label>
+         <Input type="text" name="username" placeholder="userName" className="w-[100%] h-[40px]" onChange={handleSignUpFields}/>
+     {errorsData.username && <p className="mt-1 text-red-500 text-sm">{errorsData.username}</p>}
+     </div>
+     <div className="w-[100%]">
+         <Label htmlFor="identifier" className="flex gap-2 items-center mb-1 text-[14px] "><Mail size={18}/>Email Address</Label>
+         <Input type="email" name="emailAddress" placeholder="Email" className="w-[100%] h-[40px]" onChange={handleSignUpFields}/>
+     {errorsData.emailAddress && <p className="mt-1 text-red-500 text-sm">{errorsData.emailAddress}</p>}
+     </div>
+       <div className="w-[100%]">
+   <Label htmlFor="password" className="flex gap-2 items-center mb-1 text-[14px] "><LockKeyhole size={18} />Password</Label>
+   <Input type="password" name="password" placeholder="Password" className="w-[100%] h-[40px]" onChange={handleSignUpFields}/>
+     {errorsData.password && <p className="mt-1 text-red-500 text-sm">{errorsData.password}</p>}
+   </div>
+       <div className="w-[100%]">
+   <Label htmlFor="role" className="flex gap-2 items-center mb-1 text-[14px] ">Is you interviewer?</Label>
+     <Switch
+                     checked={isInterviewer}
+                     onCheckedChange={(checked) => {
+                      console.log("Interviewer switch:", checked);
+                      setIsInterviewer(checked)}}
+                   />
+   </div>
+   </div>
+   {isSubmitting ? (
+      <div className="mt-10 bg-theme flex justify-center items-center w-[50px] h-[50px] rounded-xl hover:bg-[#ff6973]">
+                <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+              </div>
+   ): (
+ <button onClick={handleSubmitSignup} className="mt-10 bg-theme flex justify-center items-center w-[50px] h-[50px] rounded-xl hover:shadow-[0_0_20px_#48a6e6]">
+       <ArrowRight style={{ fontSize: '30px'}} className="text-white" />
+     </button>
+   )}
+   
+     <p className="mt-4 text-sm font-bold text-gray-500">Do you have an account ? <a href="/login" className="text-theme"> sign in </a></p>
+          </MotionCard>
+        </motion.div>
+      </div>
+      
+    </div>
+  )
+}
