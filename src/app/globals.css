@@ -12,7 +12,8 @@
 /* #eeedff */
 @layer base {
   :root {
-    --background-main: linear-gradient(to bottom, #eeedff 0%, #fff 100%);
+    --background-main: linear-gradient(to bottom, #4aa6e831 0%, #fff 100%);
+    /* --background-main: linear-gradient(to bottom, #eeedff 0%, #fff 100%); */
     /* --background-main: linear-gradient(to bottom, #f0e1ff  0%, #fff 100%); */
     --background-secondary: #e6f0f9;
     --background-Thirdly: #ffff;

@@ -9,7 +9,8 @@ import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { GoogleOneTap, SignedIn, SignedOut, SignIn, SignInButton, SignUpButton, useClerk, UserButton, useSignIn, useSignUp, useUser } from '@clerk/nextjs';
+import { useSignUp } from '@clerk/nextjs';
+// import { SignUpButton, useClerk, UserButton, useSignIn, useSignUp, useUser } from '@clerk/nextjs';
 import { set } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { OAuthStrategy } from '@clerk/types'
@@ -23,7 +24,6 @@ const MotionCard = motion(Card);
 
 export default function Register() {
   const { isLoaded, signUp, setActive: setActiveSignUp  } = useSignUp()
-  // const {isLoaded, signIn, setActive: setActiveSignIn } = useSignIn()
   const router = useRouter();
   const [signUpData, setSignUpData] = React.useState({
     username: '',
@@ -38,9 +38,7 @@ export default function Register() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isInterviewer, setIsInterviewer] = useState(false);
-  // const containerRef = useRef<HTMLDivElement>(null);
 
- 
   const handleSignUpFields = (e: React.ChangeEvent<HTMLInputElement>) => {
    setSignUpData({
       ...signUpData, [e.target.name]: e.target.value
@@ -66,35 +64,21 @@ export default function Register() {
        router.push("/verify")
       //  setVerify(true)
     }
-     catch (err: any) {
-      const clerkErrors = err?.errors;
-      const newErrors = {
-        username: '',
-        emailAddress: '',
-        password: '',
-        role: '',
-      }
-      clerkErrors.forEach((error: any) => {
-        const field = error.meta?.paramName
-         if (field === "email_address") {
-          newErrors.emailAddress = error.message;
-        }
+   catch (err: any) {
+  const newErrors = { identifier: '', password: '' };
+  const clerkErrors = err?.errors ?? [];
 
-        if (field === "password") {
-          console.log("password", error.message);
-          newErrors.password = error.message;
-        }
+  clerkErrors.forEach((error: any) => {
+    const msg = error.longMessage ?? error.message;
+    if (error.meta?.paramName === "identifier") newErrors.identifier = msg;
+    if (error.meta?.paramName === "password") newErrors.password = msg;
+  });
 
-        if (field === "username") {
-          newErrors.username = error.message;
-        }
-       }
-      )
-      if(!err?.meta?.paramName){
-        toast.success( `${err.message}, go to login page` || "Something went wrong. Please try again.");
-      }
-      setErrorsData(newErrors);
-    } finally {
+  if (!clerkErrors.some((e: any) => e.meta?.paramName)) {
+    toast.error(clerkErrors[0]?.longMessage ?? err.message ?? "Something went wrong. Please try again.");
+  }
+  setErrorsData(clerkErrors);
+} finally {
       setIsSubmitting(false);
     }
   }
@@ -163,8 +147,6 @@ export default function Register() {
    )}
    
      <p className="mt-4 text-sm font-bold text-gray-500">Do you have an account ? <a href="/login" className="text-theme"> sign in </a></p>
-            {/* Auth UI Container */}
-            {/* <div ref={containerRef} className="w-full" /> */}
           </MotionCard>
         </motion.div>
       </div>

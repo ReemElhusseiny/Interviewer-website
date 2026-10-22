@@ -9,7 +9,8 @@ import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { GoogleOneTap, SignedIn, SignedOut, SignIn, SignInButton, SignUpButton, useClerk, UserButton, useSignIn, useSignUp, useUser } from '@clerk/nextjs';
+import { useSignUp } from '@clerk/nextjs';
+// import { GoogleOneTap, SignedIn, SignedOut, SignIn, SignInButton, SignUpButton, useClerk, UserButton, useSignIn, useSignUp, useUser } from '@clerk/nextjs';
 import { set } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { OAuthStrategy } from '@clerk/types'
@@ -23,9 +24,9 @@ import toast from "react-hot-toast";
 const MotionCard = motion(Card);
 
 export default function Verify() {
-  const { signUp, setActive: setActiveSignUp  } = useSignUp()
-  const [code, setCode] = useState('')
-  const [codeError, setCodeError] = useState('')
+  const { signUp, setActive: setActiveSignUp  } = useSignUp();
+  const [code, setCode] = useState('');
+  const [codeError, setCodeError] = useState('');
    const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -40,8 +41,6 @@ const handleVerficationCode = async (e: React.FormEvent) => {
     })
     
     if (signUpAttempt.status === "complete") {
-      // router.push("/")
-      // setLoginPage(true)
       await setActiveSignUp ({ session: signUpAttempt.createdSessionId });
       console.log("User signed in successfully");
       toast.success("Email verified successfully!");
@@ -58,28 +57,6 @@ const handleVerficationCode = async (e: React.FormEvent) => {
   }
 }
   return (
-//     <div  className="w-full h-[calc(100vh-4.2rem)] flex overflow-x-hidden justify-center items-center bg-gradient-to-l from-[#00c8b945] to-white">
-// <Card className="flex h-[80%] w-[80%] bg-transparent">
-//     <div className="p-[80px] h-[100%] w-[50%] animate-slideLeft bg-white">
-//     <CardTitle className="mb-[40px] text-4xl font-extrabold tracking-wider text-[#00c9b9]">Verification</CardTitle>
-//  <div className="mb-[40px] flex items-center space-x-5 mt-2">
-//         <div className="h-[2px] w-[30px] bg-[#eb4e57]" /> 
-//         <p className="text-base font-extrabold text-[#eb4e57]">Enter Code</p>
-//     </div>   
-//   <div className="mb-[40px] flex flex-row items-center mt-4 gap-[20px]">
-//  </div>
-//   <Label htmlFor="code" className="mb-2">Code</Label>
-//   <Input type="text" placeholder="code" name="code" className="mb-4 w-[55%] h-[40px]" onChange={(e)=> setCode(e.target.value)}/>
-//     <button onClick={handleVerficationCode} className="mb-[40px] bg-[#eb4e57] flex justify-center items-center w-[50px] h-[50px] rounded-xl mt-4 hover:bg-[#ff6973]">
-//       <ArrowRight style={{ fontSize: '30px'}} className="text-white" />
-//     </button>
-// </div>
-// <div className="p-[80px] h-[100%] w-[50%] flex justify-center align-center animate-slideRight bg-white">
-// <img src="job.jpg" />
-// </div>
-// </Card>
-
-//     </div>
    <div className="h-[calc(100vh-4.2rem)] transition-colors duration-300 flex flex-col relative overflow-hidden">
       
       <div className="flex-1 flex flex-col items-center justify-center px-4 relative z-10 pb-20">

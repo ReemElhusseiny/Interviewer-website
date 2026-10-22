@@ -60,7 +60,7 @@ function DashboardPage() {
                     const startTime = new Date(interview.startTime);
 
                     return (
-                      <Card  className={`w-full dark:bg-[#1f2937] group cursor-pointer overflow-hidden hover:shadow-lg transition-shadow duration-300 hover:bg-[#f5effe] dark:hover:bg-transparent`}>
+                      <Card  className={`w-full dark:bg-[#1f2937] group cursor-pointer overflow-hidden hover:shadow-lg transition-shadow duration-300 dark:hover:bg-transparent`}>
                         {/* CANDIDATE INFO */}
                         <CardHeader className="p-4">
                           <div className="flex items-center gap-3">

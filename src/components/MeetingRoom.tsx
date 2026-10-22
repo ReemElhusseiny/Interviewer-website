@@ -1,3 +1,6 @@
+"use client"
+
+import React, {useEffect} from 'react'
 import {
   CallControls,
   CallingState,
@@ -27,15 +30,21 @@ function MeetingRoom() {
   const { useCallCallingState } = useCallStateHooks();
 
   const callingState = useCallCallingState();
-
-  if (callingState !== CallingState.JOINED) {
-    return (
-      <div className="h-96 flex items-center justify-center">
-        <LoaderIcon className="size-6 animate-spin" />
-      </div>
-    );
+useEffect(() => {
+  if (callingState === CallingState.LEFT) {
+    router.push("/");
   }
+}, [callingState, router]);
 
+if (callingState === CallingState.LEFT) return null;
+
+if (callingState !== CallingState.JOINED) {
+  return (
+    <div className="h-96 flex items-center justify-center">
+      <LoaderIcon className="size-6 animate-spin" />
+    </div>
+  );
+}
   return (
     <div className="h-[calc(100vh-4rem-1px)]">
       <ResizablePanelGroup direction="horizontal">

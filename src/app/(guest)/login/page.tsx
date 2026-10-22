@@ -9,10 +9,10 @@ import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { GoogleOneTap, SignedIn, SignedOut, SignIn, SignInButton, SignUpButton, useClerk, UserButton, useSignIn, useSignUp, useUser } from '@clerk/nextjs';
+import { useSignIn, useUser } from '@clerk/nextjs';
+// import { GoogleOneTap, SignedIn, SignedOut, SignIn, SignInButton, SignUpButton, useClerk, UserButton, useSignIn, useSignUp, useUser } from '@clerk/nextjs';
 import { set } from 'date-fns';
 import { useRouter } from 'next/navigation';
-import { OAuthStrategy } from '@clerk/types'
 import Link from 'next/link';
 import Register from '@/app/(guest)/register/page'
 import { motion } from 'framer-motion';
@@ -22,19 +22,16 @@ import toast from "react-hot-toast";
 const MotionCard = motion(Card);
 
 export default function Login() {
-  const { signUp, setActive: setActiveSignUp  } = useSignUp()
+  // const { signUp, setActive: setActiveSignUp  } = useSignUp()
   const {isLoaded, signIn, setActive: setActiveSignIn } = useSignIn()
-    const { user } = useUser();
-
-  useEffect(() => {
-    if (isLoaded && user) {
-      console.log("Google user is signed in:", user.emailAddresses[0].emailAddress);
-    } else{
-      console.log("No user is signed in");
-    }
-  }, [isLoaded, user]);
-  const [code, setCode] = useState('')
-  const [verify, setVerify] = useState(false)
+  const { user } = useUser();
+  // useEffect(() => {
+  //   if (isLoaded && user) {
+  //     console.log("Google user is signed in:", user.emailAddresses[0].emailAddress);
+  //   } else{
+  //     console.log("No user is signed in");
+  //   }
+  // }, [isLoaded, user]);
   const router = useRouter();
     const [errorsData, setErrorsData] = React.useState({
       identifier: '',
@@ -89,7 +86,7 @@ export default function Login() {
        }
       )
       if(!err?.meta?.paramName){
-        toast.success( `${err.message}, go to login page` || "Something went wrong. Please try again.");
+        toast.error( `${err.message}` || "Something went wrong. Please try again.");
       }
       setErrorsData(newErrors);
     }
@@ -97,43 +94,8 @@ export default function Login() {
       setIsSubmitting(false);
     }
   }
-
-// const handleGoogleSignIn = async () => {
-//   try {
-//     await signIn?.authenticateWithRedirect({
-//      strategy: "oauth_google",
-//       // This is the URL Clerk redirects to after a successful sign-in/up attempt.
-//       redirectUrlComplete: "/",
-//       // This is the URL the user is redirected to *after* the Clerk SSO page. 
-//       // It's often set to the same as redirectUrlComplete or a dedicated callback page.
-//       redirectUrl: "/sso-callback"
-//     });
-//     console.log("Google Sign-In initiated");
-//   } catch (error) {
-//     console.error("Google Sign-In failed:", error);
-//   }
-// };
-const signInWith = (strategy: OAuthStrategy) => {
-  if(!signIn) return;
-    return signIn.authenticateWithRedirect({
-        strategy,
-        redirectUrl: '/sign-in/sso-callback',
-        redirectUrlComplete: '/', // Learn more about session tasks at https://clerk.com/docs/guides/development/custom-flows/overview#session-tasks
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err: any) => {
-        // See https://clerk.com/docs/guides/development/custom-flows/error-handling
-        // for more info on error handling
-        console.log(err.errors)
-        console.error(err, null, 2)
-      })
-  }
   if(!isLoaded) return;
-  // bg-[#eaedf6]
-  // #2dac5c77
-  // bg-gradient-to-l from-[#2dac5c61] to-white to-[60%]
+
   return (
        <div className="h-[calc(100vh-4.2rem)] transition-colors duration-300 flex flex-col relative overflow-hidden">
           
@@ -191,43 +153,6 @@ const signInWith = (strategy: OAuthStrategy) => {
           </div>
           
         </div>
-//     <div  className="w-full h-[calc(100vh-4.2rem)] flex overflow-x-hidden justify-center items-center bg-gradient-to-l from-[#00c8b945] to-white">
-// <Card className="flex h-[80%] w-[80%] bg-transparent">
-//     <div className="p-[80px] h-[100%] w-[50%] animate-slideLeft bg-white">
-//     <CardTitle className="mb-[40px] text-4xl font-extrabold tracking-wider text-[#00c9b9]">Sign In</CardTitle>
-//  <div className="mb-[40px] flex items-center space-x-5 mt-2">
-//         <div className="h-[2px] w-[30px] bg-[#eb4e57]" /> 
-//         <p className="text-base font-extrabold text-[#eb4e57]">Sign in with</p>
-//     </div>   
-//   <div className="mb-[40px] flex flex-row items-center mt-4 gap-[20px]">
-//   <div onClick={() => signInWith('oauth_google')} className="p-[20px] w-auto border border-[#b6bec3]-700 rounded-lg flex justify-center items-center content-center gap-[15px] py-2 cursor-pointer hover:bg-[#f7f7f9]">
-//  <FcGoogle className="text-[20px]" />
-//  <p  className="mt-1 text-gray-600 font-medium">Sign in with Google </p>
-//  </div>
-//  <div className="p-[20px] w-auto border border-[#b6bec3]-700 rounded-lg flex justify-center items-center content-center gap-[15px] py-2 cursor-pointer hover:bg-[#f7f7f9]">
-//  <FaGithub className="text-[20px]" />
-//   <p className="mt-1 text-gray-600 font-medium">Sign in with Github </p>
-//  </div>
-//  </div>
-//    <div className="">
-//     <Label htmlFor="identifier" className="mb-2">Email Address</Label>
-//     <Input type="email" name="identifier" placeholder="Email" className="mb-4 w-[55%] h-[40px]" onChange={handleLoginFields}/>
-//     </div>
-//     <div className="">
-//     <Label htmlFor="password" className="mb-2">Password</Label>
-//     <Input type="password" name="password" placeholder="Password" className="mb-4 w-[55%] h-[40px]" onChange={handleLoginFields}/>
-//     </div>
-//     <button onClick={handleSubmitLogin} className="mb-[40px] bg-[#eb4e57] flex justify-center items-center w-[50px] h-[50px] rounded-xl mt-4 hover:bg-[#ff6973]">
-//       <ArrowRight style={{ fontSize: '30px'}} className="text-white" />
-//     </button>
-//     <p className="text-sm font-bold text-gray-500">Don't have an account ? <a href="/register" className="text-[#eb4e57]"> sign up </a></p>
-// </div>
-// <div className="p-[80px] h-[100%] w-[50%] flex justify-center align-center animate-slideRight bg-white">
-// <img src="job.jpg" />
-// </div>
-// </Card>
-//  <div id="clerk-captcha" />
-//     </div>
 
 
   )

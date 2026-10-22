@@ -43,78 +43,6 @@ export default function Home() {
         router.push(`/${title.toLowerCase()}`);
     }
   };
-  //  const WordCarousel: React.FC = () => {
-  //   const word1Controls = useAnimation();
-  //   const word2Controls = useAnimation();
-  //   const word3Controls = useAnimation();
-  //   const word4Controls = useAnimation();
-  //   const word5Controls = useAnimation();
-
-  //   const word1Ref = useRef<HTMLParagraphElement>(null);
-  //   const word2Ref = useRef<HTMLParagraphElement>(null);
-  //   const word3Ref = useRef<HTMLParagraphElement>(null);
-  //   const word4Ref = useRef<HTMLParagraphElement>(null);
-  //   const word5Ref = useRef<HTMLParagraphElement>(null);
-
-  //   const words: Word[] = [
-  //     {
-  //       text: "Manage interviews easily",
-  //       ref: word1Ref,
-  //       controls: word1Controls,
-  //     },
-  //     { text: "Follow your schedule effortlessly", ref: word2Ref, controls: word2Controls },
-  //     { text: "Record meetings for later review", ref: word3Ref, controls: word3Controls },
-  //     { text: "Organize candidates in one place", ref: word4Ref, controls: word4Controls },
-  //     { text: "Access all interviews anytime", ref: word5Ref, controls: word5Controls },
-  //   ];
-
-  //   const sleep = (ms: number) =>
-  //     new Promise((resolve) => setTimeout(resolve, ms));
-
-  //   const runSequence = useCallback(async () => {
-  //     while (true) {
-  //       for (const word of words) {
-  //         // Fade in
-  //         await word.controls.start({
-  //           opacity: 1,
-  //           transform: 'translate(-50%, -50%) scale(2)',
-  //           transition: { duration: 1 },
-  //         });
-  //         await sleep(3000); // Visible duration
-  //         await word.controls.start({
-  //           opacity: 0,
-  //           transform: 'translate(-50%, -50%) scale(2)',
-  //           transition: { duration: 1 },
-  //         });
-  //         await sleep(500);
-  //       }
-  //     }
-  //   }, [words]);
-
-  //   useEffect(() => {
-  //     runSequence();
-  //   }, [runSequence]);
-
-  //   const commonClasses =
-  //     "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-800 text-3xl font-extrabold";
-
-  //   return (
-  //     <div className="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-800 text-3xl font-extrabold">
-  //       {words.map((word, idx) => (
-  //         <motion.p
-  //           key={idx}
-  //           ref={word.ref}
-  //           initial={{ opacity: 0 }}
-  //           animate={word.controls}
-  //           className={commonClasses}
-  //         >
-  //           {word.text}
-  //         </motion.p>
-  //       ))}
-  //     </div>
-  //   );
-  // };
-  
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -129,7 +57,6 @@ export default function Home() {
     show: { opacity: 1, y: 0 }
   };
    if (isLoading) return <LoaderUI />;
-  //  bg-gradient-to-b from-[#eeedff] to-white
   return (
     <div className="w-full">
       {/* text-[#4f46e5] */}
@@ -186,10 +113,6 @@ export default function Home() {
         </>
       ) : (
         <>
-          {/* <div>
-            <h1 className="text-3xl font-bold">Your Interviews</h1>
-            <p className="text-muted-foreground mt-1">View and join your scheduled interviews</p>
-          </div> */}
              <div className="mb-16 text-center">
              <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">Your Interviews</h2>
              <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
