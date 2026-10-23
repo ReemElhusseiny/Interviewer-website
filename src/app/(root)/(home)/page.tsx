@@ -90,7 +90,7 @@ export default function Home() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 h-[400px]" // Fixed height for 3D effect space
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 h-[950px] lg:h-[400px] md:h-[500px]" // Fixed height for 3D effect space
           >
             {QUICK_ACTIONS.map((action, index) => (
               <motion.div key={index} variants={item} className="h-full">

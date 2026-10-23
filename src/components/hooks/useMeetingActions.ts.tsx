@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useStreamVideoClient } from "@stream-io/video-react-sdk";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const useMeetingActions = () => {
   const router = useRouter();

@@ -5,10 +5,12 @@ import { Card } from "./ui/card";
 import { CameraIcon, MicIcon, SettingsIcon, VideoOff, ArrowLeft, Sparkles, Camera, CameraOff, Mic, MicOff } from "lucide-react";
 import Link from "next/link";
 import { motion } from 'framer-motion';
+import toast from "react-hot-toast";
 
 function MeetingSetup({ onSetupComplete }: { onSetupComplete: () => void }) {
   const [isCameraDisabled, setIsCameraDisabled] = useState(true);
   const [isMicDisabled, setIsMicDisabled] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
 
   const call = useCall();
    console.log("Call object in MeetingSetup:", call);
@@ -31,15 +33,31 @@ function MeetingSetup({ onSetupComplete }: { onSetupComplete: () => void }) {
     if (isMicDisabled) call.microphone.disable();
     else call.microphone.enable();
   }, [isMicDisabled, call.microphone]);
-
-  const handleJoin = async () => {
+const handleJoin = async () => {
+  if (!call) return;
+  try {
+    setIsJoining(true); // تشغيل الـ loading
+    
     await call.join();
+    
+    toast.success("Joined meeting successfully!");
     onSetupComplete();
-  };
+  } catch (err: any) {
+    console.error("Failed to join meeting:", err);
+    
+    if (err?.message?.includes("SFU WS connection failed") || err?.message?.includes("WebSocket")) {
+      toast.error("Connection failed! Please disable your Ad-Blocker or check your internet connection.");
+    } else {
+      toast.error(err?.message || "Failed to join the meeting. Please try again.");
+    }
+  } finally {
+    setIsJoining(false);
+  }
+};
 
   return (
     <div className="h-full flex flex-col gap-[20px] items-center  p-6 ">
-      <div className="w-full flex justify-between">
+      <div className="w-full flex flex-col gap-3 sm:gap-0 sm:flex-row sm:justify-between">
         <Link href="/">
      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors" >
            <ArrowLeft size={20} />
@@ -58,7 +76,7 @@ function MeetingSetup({ onSetupComplete }: { onSetupComplete: () => void }) {
           <p className="text-gray-500 dark:text-gray-400">
             Check your audio and video settings before entering the call.
           </p>
-         <div className="relative w-full max-w-4xl mx-auto aspect-video rounded-[30px] overflow-hidden bg-muted/50 border relative mt-4">
+         <div className="relative w-full max-w-4xl h-[400px] mx-auto aspect-video rounded-[30px] overflow-hidden bg-muted/50 border relative mt-4">
                 <VideoPreview className="w-full h-full" />
                    {(cameraState.hasBrowserPermission === false ||
     cameraState.isEnabled === false) && (
@@ -108,14 +126,30 @@ function MeetingSetup({ onSetupComplete }: { onSetupComplete: () => void }) {
               </div>
             </div>
       <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full max-w-md">
-          <motion.button
+          {/* <motion.button
             onClick={handleJoin}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="flex-1 py-4 bg-[#6bbcf0] hover:bg-[#6bbcf0]/80 text-white font-bold rounded-xl shadow-lg shadow-[#6bbcf0]/80 transition-all"
           >
             Start Meeting Now
-          </motion.button>
+          </motion.button> */}
+          <motion.button
+  onClick={handleJoin}
+  disabled={isJoining} 
+  whileHover={{ scale: isJoining ? 1 : 1.02 }}
+  whileTap={{ scale: isJoining ? 1 : 0.98 }}
+  className="flex-1 py-4 bg-[#6bbcf0] hover:bg-[#6bbcf0]/80 text-white font-bold rounded-xl shadow-lg shadow-[#6bbcf0]/80 transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+>
+  {isJoining ? (
+    <>
+      <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
+      Connecting...
+    </>
+  ) : (
+    "Start Meeting Now"
+  )}
+</motion.button>
         </div>
             </div>
   );

@@ -30,7 +30,6 @@ export default function Verify() {
    const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-
 const handleVerficationCode = async (e: React.FormEvent) => {
   e.preventDefault();
   try {

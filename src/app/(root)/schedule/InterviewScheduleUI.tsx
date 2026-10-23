@@ -137,7 +137,7 @@ function InterviewScheduleUI() {
   return (
     <div className="w-full h-full">
     <div className="container max-w-7xl mx-auto p-6 space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:gap-0 sm:flex-row sm:items-center sm:justify-between">
         {/* HEADER INFO */}
         <div>
           <h1 className="text-3xl font-bold">Interviews</h1>
@@ -248,25 +248,15 @@ function InterviewScheduleUI() {
                 </div>
 
                 {/* TIME */}
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Time</label>
-                  <Select
-                    value={formData.time}
-                    onValueChange={(time) => setFormData({ ...formData, time })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select time" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {TIME_SLOTS.map((time) => (
-                        <SelectItem key={time} value={time}>
-                          {time}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+<div className="space-y-2">
+  <label className="text-sm font-medium">Time</label>
+  <input
+    type="time"
+    value={formData.time}
+    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+  />
+</div>
               </div>
 
               {/* ACTION BUTTONS */}

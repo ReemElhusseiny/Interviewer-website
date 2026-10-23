@@ -87,7 +87,7 @@ function RecordingsPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleStart}
-                className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 flex items-center gap-3 mx-auto transition-all"
+                className="px-8 py-4 bg-[#48a6e6] hover:bg-[#6bbcf0] text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 flex items-center gap-3 mx-auto transition-all"
               >
                 <Video size={20} />
                 Start New Meeting
